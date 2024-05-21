@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace Project_BD_Tattoos
 {
-    public partial class Form1 : Form
+    public partial class Rececionista : Form
     {
-        public Form1()
+        public Rececionista()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            this.Hide();
         }
     }
 }
