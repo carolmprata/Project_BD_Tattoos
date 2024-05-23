@@ -82,9 +82,11 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(152, 43);
+            this.pictureBox1.Image = global::Project_BD_Tattoos.Properties.Resources.BD_LOGO;
+            this.pictureBox1.Location = new System.Drawing.Point(176, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(211, 101);
+            this.pictureBox1.Size = new System.Drawing.Size(148, 148);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
@@ -92,7 +94,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(115, 147);
+            this.label1.Location = new System.Drawing.Point(112, 163);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(295, 29);
             this.label1.TabIndex = 4;
@@ -117,6 +119,7 @@
             this.txtID.Name = "txtID";
             this.txtID.Size = new System.Drawing.Size(145, 26);
             this.txtID.TabIndex = 239;
+            this.txtID.Visible = false;
             this.txtID.TextChanged += new System.EventHandler(this.txtID_TextChanged);
             // 
             // label3
@@ -129,6 +132,7 @@
             this.label3.Size = new System.Drawing.Size(30, 20);
             this.label3.TabIndex = 238;
             this.label3.Text = "ID:";
+            this.label3.Visible = false;
             // 
             // label4
             // 
@@ -148,6 +152,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(145, 26);
             this.txtName.TabIndex = 242;
+            this.txtName.Visible = false;
             this.txtName.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label5
@@ -160,6 +165,7 @@
             this.label5.Size = new System.Drawing.Size(59, 20);
             this.label5.TabIndex = 241;
             this.label5.Text = "Name: ";
+            this.label5.Visible = false;
             // 
             // label6
             // 
@@ -178,6 +184,7 @@
             this.button4.TabIndex = 243;
             this.button4.Text = "Search";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // Login

@@ -53,6 +53,11 @@ namespace Project_BD_Tattoos
             {
                 button1.BackColor = Color.Green;
                 button3.BackColor = originalButton3Color; 
+                label3.Show();
+                txtID.Show();
+                label5.Show();
+                button4.Show();
+                txtName.Show();
             }
         }
 
@@ -65,6 +70,11 @@ namespace Project_BD_Tattoos
             {
                 button3.BackColor = Color.Green;
                 button1.BackColor = originalButtonRececionistaColor;
+                label3.Show();
+                txtID.Show();
+                label5.Show();
+                button4.Show();
+                txtName.Show();
             }
         }
 
