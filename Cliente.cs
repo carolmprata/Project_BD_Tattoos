@@ -30,7 +30,7 @@ namespace Project_BD_Tattoos
             string itemSelecionado = comboBoxCategorias.SelectedItem?.ToString();
             if (!string.IsNullOrEmpty(itemSelecionado))
             {
-                if (itemSelecionado == "EspecialistaRemocaoLaser" || itemSelecionado == "Tatuador" || itemSelecionado == "BodyPiercer")
+                if (itemSelecionado == "Especialista Remoção a Laser" || itemSelecionado == "Tatuador" || itemSelecionado == "Body Piercer")
                 {
                     LoadArtistasByCategory(itemSelecionado);
                 }
@@ -56,8 +56,6 @@ namespace Project_BD_Tattoos
             comboBoxCategorias.Items.Add("Tatuagem");
             comboBoxCategorias.Items.Add("Piercing");
         }
-
-
 
         private void LoadArtistasByCategory(string categoria)
         {
