@@ -143,5 +143,10 @@ namespace Project_BD_Tattoos
             dataGridViewServicos.Show();
             LoadServicosCategorias();
         }
+
+        private void Cliente_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

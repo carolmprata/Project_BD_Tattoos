@@ -38,6 +38,7 @@
             this.Name = "Artista";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Artista";
+            this.Load += new System.EventHandler(this.Artista_Load);
             this.ResumeLayout(false);
 
         }

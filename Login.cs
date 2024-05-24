@@ -29,6 +29,12 @@ namespace Project_BD_Tattoos
         String name = "";
         String id = "";
 
+        public String Rececionista_name;
+        public String Rececionista_id;
+
+        public String Artista_name;
+        public String Artista_id;
+
 
 
         public Login()
@@ -106,18 +112,18 @@ namespace Project_BD_Tattoos
                 if (isRececionista)
                 {
                     query = @"
-                SELECT Staff.*
-                FROM Staff
-                INNER JOIN Rececionista ON Staff.ID = Rececionista.Staff_ID
-                WHERE Staff.Nome = @name AND Staff.ID = @id";
+            SELECT Staff.*
+            FROM Staff
+            INNER JOIN Rececionista ON Staff.ID = Rececionista.Staff_ID
+            WHERE Staff.Nome = @name AND Staff.ID = @id";
                 }
                 else if (isArtista)
                 {
                     query = @"
-                SELECT Staff.*
-                FROM Staff
-                INNER JOIN Artista ON Staff.ID = Artista.Staff_ID
-                WHERE Staff.Nome = @name AND Staff.ID = @id";
+            SELECT Staff.*
+            FROM Staff
+            INNER JOIN Artista ON Staff.ID = Artista.Staff_ID
+            WHERE Staff.Nome = @name AND Staff.ID = @id";
                 }
 
                 if (!string.IsNullOrEmpty(query))
@@ -131,12 +137,16 @@ namespace Project_BD_Tattoos
                         if (isRececionista)
                         {
                             Rececionista rececionista = new Rececionista();
+                            rececionista.Rececionista_name = name;
+                            rececionista.Rececionista_id = id;
                             rececionista.Show();
                             this.Hide();
                         }
                         else if (isArtista)
                         {
                             Artista artista = new Artista();
+                            artista.Artista_name = name;
+                            artista.Artista_id = id;
                             artista.Show();
                             this.Hide();
                         }
@@ -153,6 +163,7 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Erro na conexão à base de dados: " + ex.Message);
             }
         }
+
 
 
         private void button4_Click(object sender, EventArgs e)
