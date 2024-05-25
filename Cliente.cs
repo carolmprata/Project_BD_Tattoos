@@ -1,20 +1,13 @@
 ﻿using ProjetoBD;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project_BD_Tattoos
 {
     public partial class Cliente : Form
     {
-
         private SqlConnection cn;
         public static BDConnection bdConnection = new BDConnection();
 
@@ -23,6 +16,10 @@ namespace Project_BD_Tattoos
             InitializeComponent();
             comboBoxCategorias.SelectedIndexChanged += new EventHandler(comboBoxCategorias_SelectedIndexChanged);
 
+            // Adicionar eventos para os botões
+            btnArtistas.Click += new EventHandler(BtnArtistas_Click);
+            btnServicos.Click += new EventHandler(BtnServicos_Click);
+            btnProdutos.Click += new EventHandler(BtnProdutos_Click);
         }
 
         private void comboBoxCategorias_SelectedIndexChanged(object sender, EventArgs e)
@@ -108,20 +105,47 @@ namespace Project_BD_Tattoos
             }
         }
 
-        private void LoadServicosByCategory(string zona)
+        private void LoadServicosByCategory(string categoria)
         {
             try
             {
                 cn = bdConnection.getSGBDConnection();
                 cn.Open();
-                string query = "SELECT Zona, Descricao, Cuidados, Preco, Duracao FROM Servico";
-                SqlCommand cmd = new SqlCommand(query, cn);
-                cmd.Parameters.AddWithValue("@Zona", zona);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
+                string query = "";
 
-                dataGridViewServicos.DataSource = dataTable;
+                switch (categoria)
+                {
+                    case "Tatuagem":
+                        query = @"
+                SELECT S.ID, S.Zona, S.Descricao, S.Cuidados, S.Preco, S.Duracao, T.Estilo, T.NumeroSessoes
+                FROM Servico S
+                INNER JOIN Tatuagem T ON S.ID = T.Servico_ID";
+                        break;
+                    case "Piercing":
+                        query = @"
+                SELECT S.ID, S.Zona, S.Descricao, S.Cuidados, S.Preco, S.Duracao, P.Nome, B.Nome AS BodyPiercer
+                FROM Servico S
+                INNER JOIN Piercing P ON S.ID = P.Servico_ID
+                INNER JOIN BodyPiercer B ON P.BodyPiercer_ID = B.Artista_ID";
+                        break;
+                    case "Remocao":
+                        query = @"
+                SELECT S.ID, S.Zona, S.Descricao, S.Cuidados, S.Preco, S.Duracao, R.NumeroSessoes, E.Nome AS EspecialistaRemocaoLaser
+                FROM Servico S
+                INNER JOIN Remocao R ON S.ID = R.Servico_ID
+                INNER JOIN EspecialistaRemocaoLaser E ON R.EspecialistaRemocaoLaser = E.Artista_ID";
+                        break;
+                }
+
+                if (!string.IsNullOrEmpty(query))
+                {
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                    dataGridViewArtistas.DataSource = dataTable;
+                }
                 cn.Close();
             }
             catch (Exception ex)
@@ -130,23 +154,45 @@ namespace Project_BD_Tattoos
             }
         }
 
-        private void btnArtistas_Click_1(object sender, EventArgs e)
+
+        private void BtnArtistas_Click(object sender, EventArgs e)
         {
-            dataGridViewArtistas.Show();
-            dataGridViewServicos.Hide();
             LoadArtistaCategorias();
         }
 
-        private void btnServico_Click_1(object sender, EventArgs e)
+        private void BtnServicos_Click(object sender, EventArgs e)
         {
-            dataGridViewArtistas.Hide();
-            dataGridViewServicos.Show();
             LoadServicosCategorias();
+        }
+
+        private void BtnProdutos_Click(object sender, EventArgs e)
+        {
+            LoadProdutos();
+        }
+
+        private void LoadProdutos()
+        {
+            try
+            {
+                cn = bdConnection.getSGBDConnection();
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Nome, Preco, Quantidade, Descricao FROM Produto", cn);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                dataGridViewArtistas.DataSource = dataTable;
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar produtos: " + ex.Message);
+            }
         }
 
         private void Cliente_Load(object sender, EventArgs e)
         {
-
+            // Carregar categorias iniciais ou qualquer configuração inicial necessária
         }
     }
 }
