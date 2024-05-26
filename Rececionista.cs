@@ -22,6 +22,7 @@ namespace Project_BD_Tattoos
         private void Rececionista_Load(object sender, EventArgs e)
         {
             label2.Text = "Bem Vindo, " + Rececionista_name + "!";
+            ToggleButton1Visibility();
         }
 
         private void RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -42,6 +43,13 @@ namespace Project_BD_Tattoos
             {
                 LoadProdutos();
             }
+
+            ToggleButton1Visibility();
+        }
+
+        private void ToggleButton1Visibility()
+        {
+            button1.Visible = botaoClientes.Checked;
         }
 
         private void LoadClientes()
@@ -143,29 +151,170 @@ namespace Project_BD_Tattoos
                 string selectedItem = DisplayContainer.SelectedItem.ToString();
                 string id = selectedItem.Split(',')[0].Split(':')[1].Trim();
 
-                string newName = Prompt.ShowDialog("Enter new name", "Alterar");
-
-                try
+                if (botaoClientes.Checked)
                 {
-                    cn = bdConnection.getSGBDConnection();
-                    cn.Open();
-                    SqlCommand cmd = new SqlCommand("UPDATE Cliente SET Nome = @Nome WHERE ID = @ID", cn);
-                    cmd.Parameters.AddWithValue("@Nome", newName);
-                    cmd.Parameters.AddWithValue("@ID", id);
-                    cmd.ExecuteNonQuery();
-                    cn.Close();
-                    MessageBox.Show("Item updated successfully!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error updating item: " + ex.Message);
-                }
+                    string newName = Prompt.ShowDialog("Enter new name", "Alterar Cliente");
+                    string newMorada = Prompt.ShowDialog("Enter new address", "Alterar Cliente");
+                    string newEmail = Prompt.ShowDialog("Enter new email", "Alterar Cliente");
+                    string newDataNascimento = Prompt.ShowDialog("Enter new birthdate (YYYY-MM-DD)", "Alterar Cliente");
+                    string newTelefone = Prompt.ShowDialog("Enter new phone number", "Alterar Cliente");
+                    string newGenero = Prompt.ShowDialog("Enter new gender", "Alterar Cliente");
+                    string newRegistoSaude = Prompt.ShowDialog("Enter new health record", "Alterar Cliente");
 
-                LoadCurrentItems();
+                    try
+                    {
+                        cn = bdConnection.getSGBDConnection();
+                        cn.Open();
+                        SqlCommand cmd = new SqlCommand(
+                            "UPDATE Cliente SET Nome = @Nome, Morada = @Morada, Email = @Email, DataNascimento = @DataNascimento, Telefone = @Telefone, Genero = @Genero, RegistoSaude = @RegistoSaude WHERE ID = @ID",
+                            cn);
+                        cmd.Parameters.AddWithValue("@Nome", newName);
+                        cmd.Parameters.AddWithValue("@Morada", newMorada);
+                        cmd.Parameters.AddWithValue("@Email", newEmail);
+                        cmd.Parameters.AddWithValue("@DataNascimento", newDataNascimento);
+                        cmd.Parameters.AddWithValue("@Telefone", newTelefone);
+                        cmd.Parameters.AddWithValue("@Genero", newGenero);
+                        cmd.Parameters.AddWithValue("@RegistoSaude", newRegistoSaude);
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.ExecuteNonQuery();
+                        cn.Close();
+                        MessageBox.Show("Cliente updated successfully!");
+                    }
+
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error updating Cliente: " + ex.Message);
+                    }
+
+                    LoadClientes();
+                }
+                else if (botaoServicos.Checked)
+                {
+                    string newZona = Prompt.ShowDialog("Enter new zone", "Alterar Serviço");
+                    string newDescricao = Prompt.ShowDialog("Enter new description", "Alterar Serviço");
+                    string newCuidados = Prompt.ShowDialog("Enter new care instructions", "Alterar Serviço");
+                    string newPreco = Prompt.ShowDialog("Enter new price", "Alterar Serviço");
+                    string newDuracao = Prompt.ShowDialog("Enter new duration (HH:MM:SS)", "Alterar Serviço");
+
+                    try
+                    {
+                        cn = bdConnection.getSGBDConnection();
+                        cn.Open();
+                        SqlCommand cmd = new SqlCommand(
+                            "UPDATE Servico SET Zona = @Zona, Descricao = @Descricao, Cuidados = @Cuidados, Preco = @Preco, Duracao = @Duracao WHERE ID = @ID",
+                            cn);
+                        cmd.Parameters.AddWithValue("@Zona", newZona);
+                        cmd.Parameters.AddWithValue("@Descricao", newDescricao);
+                        cmd.Parameters.AddWithValue("@Cuidados", newCuidados);
+                        cmd.Parameters.AddWithValue("@Preco", newPreco);
+                        cmd.Parameters.AddWithValue("@Duracao", newDuracao);
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.ExecuteNonQuery();
+                        cn.Close();
+                        MessageBox.Show("Serviço updated successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error updating Serviço: " + ex.Message);
+                    }
+
+                    LoadServicos();
+                }
+                else if (botaoPagamentos.Checked)
+                {
+                    string newClienteID = Prompt.ShowDialog("Enter new client ID", "Alterar Pagamento");
+                    string newDataHora = Prompt.ShowDialog("Enter new date and time (YYYY-MM-DD HH:MM:SS)", "Alterar Pagamento");
+                    string newValor = Prompt.ShowDialog("Enter new amount", "Alterar Pagamento");
+                    string newMetodo = Prompt.ShowDialog("Enter new payment method", "Alterar Pagamento");
+
+                    try
+                    {
+                        cn = bdConnection.getSGBDConnection();
+                        cn.Open();
+                        SqlCommand cmd = new SqlCommand(
+                            "UPDATE Pagamento SET Cliente_ID = @Cliente_ID, DataHora = @DataHora, Valor = @Valor, Metodo = @Metodo WHERE ID = @ID",
+                            cn);
+                        cmd.Parameters.AddWithValue("@Cliente_ID", newClienteID);
+                        cmd.Parameters.AddWithValue("@DataHora", newDataHora);
+                        cmd.Parameters.AddWithValue("@Valor", newValor);
+                        cmd.Parameters.AddWithValue("@Metodo", newMetodo);
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.ExecuteNonQuery();
+                        cn.Close();
+                        MessageBox.Show("Pagamento updated successfully!");
+                    }
+                    catch (SqlException ex)
+                    {
+                        if (ex.Number == 50000)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error adding/updating Pagamento: " + ex.Message);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error updating Pagamento: " + ex.Message);
+                    }
+
+                    LoadPagamentos();
+                }
+                else if (botaoProdutos.Checked)
+                {
+                    string newNome = Prompt.ShowDialog("Enter new product name", "Alterar Produto");
+                    string newPreco = Prompt.ShowDialog("Enter new price", "Alterar Produto");
+                    string newQuantidade = Prompt.ShowDialog("Enter new quantity", "Alterar Produto");
+                    string newDescricao = Prompt.ShowDialog("Enter new description", "Alterar Produto");
+
+                    try
+                    {
+                        cn = bdConnection.getSGBDConnection();
+                        cn.Open();
+                        SqlCommand cmd = new SqlCommand(
+                            "UPDATE Produto SET Nome = @Nome, Preco = @Preco, Quantidade = @Quantidade, Descricao = @Descricao WHERE ID = @ID",
+                            cn);
+                        cmd.Parameters.AddWithValue("@Nome", newNome);
+                        cmd.Parameters.AddWithValue("@Preco", newPreco);
+                        cmd.Parameters.AddWithValue("@Quantidade", newQuantidade);
+                        cmd.Parameters.AddWithValue("@Descricao", newDescricao);
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.ExecuteNonQuery();
+                        cn.Close();
+                        MessageBox.Show("Produto updated successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error updating Produto: " + ex.Message);
+                    }
+
+                    LoadProdutos();
+                }
             }
             else
             {
                 MessageBox.Show("Please select an item to update.");
+            }
+        }
+
+        private void LoadCurrentItems()
+        {
+            if (botaoClientes.Checked)
+            {
+                LoadClientes();
+            }
+            else if (botaoServicos.Checked)
+            {
+                LoadServicos();
+            }
+            else if (botaoPagamentos.Checked)
+            {
+                LoadPagamentos();
+            }
+            else if (botaoProdutos.Checked)
+            {
+                LoadProdutos();
             }
         }
 
@@ -187,7 +336,7 @@ namespace Project_BD_Tattoos
                 {
                     cn = bdConnection.getSGBDConnection();
                     cn.Open();
-                    SqlCommand cmd = new SqlCommand("AddCliente", cn);
+                    SqlCommand cmd = new SqlCommand("AddClient", cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ID", nextID);
                     cmd.Parameters.AddWithValue("@Nome", newName);
@@ -265,6 +414,17 @@ namespace Project_BD_Tattoos
                     cn.Close();
                     MessageBox.Show("Pagamento added successfully!");
                 }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 50000)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error adding/updating Pagamento: " + ex.Message);
+                    }
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error adding Pagamento: " + ex.Message);
@@ -341,6 +501,17 @@ namespace Project_BD_Tattoos
                     cn.Close();
                     MessageBox.Show("Item deleted successfully!");
                 }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 50000)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error deleting item: " + ex.Message);
+                    }
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error deleting item: " + ex.Message);
@@ -376,26 +547,6 @@ namespace Project_BD_Tattoos
             return nextID;
         }
 
-        private void LoadCurrentItems()
-        {
-            if (botaoClientes.Checked)
-            {
-                LoadClientes();
-            }
-            else if (botaoServicos.Checked)
-            {
-                LoadServicos();
-            }
-            else if (botaoPagamentos.Checked)
-            {
-                LoadPagamentos();
-            }
-            else if (botaoProdutos.Checked)
-            {
-                LoadProdutos();
-            }
-        }
-
         public static class Prompt
         {
             public static string ShowDialog(string text, string caption)
@@ -419,6 +570,13 @@ namespace Project_BD_Tattoos
 
                 return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            MarcacaoForm marcacaoForm = new MarcacaoForm();
+            marcacaoForm.Show();
         }
     }
 }
