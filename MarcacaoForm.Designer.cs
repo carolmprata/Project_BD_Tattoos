@@ -121,9 +121,12 @@ namespace Project_BD_Tattoos
             this.dateTPInicio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dateTPInicio.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPInicio.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dateTPInicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTPInicio.Location = new System.Drawing.Point(771, 77);
             this.dateTPInicio.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dateTPInicio.MinDate = new System.DateTime(2000, 1, 1, 0, 0, 0, 0);
             this.dateTPInicio.Name = "dateTPInicio";
             this.dateTPInicio.Size = new System.Drawing.Size(319, 34);
             this.dateTPInicio.TabIndex = 21;

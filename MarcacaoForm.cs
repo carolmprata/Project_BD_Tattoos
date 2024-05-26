@@ -11,6 +11,8 @@ namespace Project_BD_Tattoos
         private SqlConnection cn;
         public static BDConnection bdConnection = new BDConnection();
 
+        public string Rececionista_name { get; set; }
+
         public MarcacaoForm()
         {
             InitializeComponent();
@@ -194,7 +196,8 @@ namespace Project_BD_Tattoos
                 int artistID = int.Parse(selectedArtist.Split(new[] { "ID: " }, StringSplitOptions.None)[1].Split(')')[0].Trim());
                 int serviceID = int.Parse(selectedService.Split(new[] { "ID: " }, StringSplitOptions.None)[1].Split(',')[0].Trim());
                 string clientName = nameBar.Text;
-                DateTime date = dateTPInicio.Value;
+                DateTime date = dateTPInicio.Value.Date;
+                TimeSpan time = dateTPInicio.Value.TimeOfDay;
 
                 // Find client ID by name
                 SqlCommand findClientCmd = new SqlCommand("SELECT ID FROM Cliente WHERE Nome = @Nome", cn);
@@ -203,9 +206,10 @@ namespace Project_BD_Tattoos
 
                 // Insert new booking
                 SqlCommand cmd = new SqlCommand(
-                    "INSERT INTO Agendamento (ID, Data, Cliente_ID, Servico_ID, Artista_ID) VALUES (@ID, @Data, @Cliente_ID, @Servico_ID, @Artista_ID)", cn);
+                    "INSERT INTO Agendamento (ID, Data, Hora, Cliente_ID, Servico_ID, Artista_ID) VALUES (@ID, @Data, @Hora, @Cliente_ID, @Servico_ID, @Artista_ID)", cn);
                 cmd.Parameters.AddWithValue("@ID", GetNextID("Agendamento"));
                 cmd.Parameters.AddWithValue("@Data", date);
+                cmd.Parameters.AddWithValue("@Hora", time);
                 cmd.Parameters.AddWithValue("@Cliente_ID", clientID);
                 cmd.Parameters.AddWithValue("@Servico_ID", serviceID);
                 cmd.Parameters.AddWithValue("@Artista_ID", artistID);
@@ -214,6 +218,15 @@ namespace Project_BD_Tattoos
                 cn.Close();
 
                 MessageBox.Show("Marcação finalizada com sucesso!");
+                // Close the form
+                this.Close();
+                //abrir o rececionista
+                Rececionista rececionistaForm = new Rececionista();
+                //nome do rececionista
+                
+                rececionistaForm.Rececionista_name = Rececionista_name;
+
+                rececionistaForm.Show();
             }
             catch (Exception ex)
             {
@@ -238,9 +251,14 @@ namespace Project_BD_Tattoos
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error retrieving next ID: " + ex.Message);
+                MessageBox.Show("Erro ao obter o próximo ID: " + ex.Message);
             }
             return nextID;
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            // Handle the event if needed
         }
     }
 }
