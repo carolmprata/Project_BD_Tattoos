@@ -122,7 +122,7 @@ namespace Project_BD_Tattoos
                     query = @"
             SELECT Staff.*
             FROM Staff
-            INNER JOIN Artista ON Staff.ID = Artista.Staff_ID
+            INNER JOIN Artista ON Staff.ID = Artista.Artista_ID
             WHERE Staff.Nome = @name AND Staff.ID = @id";
                 }
 
