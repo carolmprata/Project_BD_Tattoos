@@ -33,7 +33,6 @@
             this.btnArtistas = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.comboBoxCategorias = new System.Windows.Forms.ComboBox();
-            this.dataGridViewArtistas = new System.Windows.Forms.DataGridView();
             this.btnReview = new System.Windows.Forms.Button();
             this.txtNomeArtista = new System.Windows.Forms.TextBox();
             this.txtFeedback = new System.Windows.Forms.TextBox();
@@ -51,8 +50,8 @@
             this.mostrarreviews = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.ListBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArtistas)).BeginInit();
             this.SuspendLayout();
             // 
             // btnServicos
@@ -107,17 +106,6 @@
             this.comboBoxCategorias.Name = "comboBoxCategorias";
             this.comboBoxCategorias.Size = new System.Drawing.Size(276, 24);
             this.comboBoxCategorias.TabIndex = 4;
-            // 
-            // dataGridViewArtistas
-            // 
-            this.dataGridViewArtistas.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dataGridViewArtistas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewArtistas.Location = new System.Drawing.Point(225, 130);
-            this.dataGridViewArtistas.Margin = new System.Windows.Forms.Padding(4);
-            this.dataGridViewArtistas.Name = "dataGridViewArtistas";
-            this.dataGridViewArtistas.RowHeadersWidth = 51;
-            this.dataGridViewArtistas.Size = new System.Drawing.Size(892, 459);
-            this.dataGridViewArtistas.TabIndex = 5;
             // 
             // btnReview
             // 
@@ -304,7 +292,7 @@
             this.mostrarreviews.Text = "Mostrar Review";
             this.mostrarreviews.UseVisualStyleBackColor = true;
             this.mostrarreviews.Visible = false;
-            this.mostrarreviews.Click += new System.EventHandler(this.mostrarreviews_Click);
+            this.mostrarreviews.Click += new System.EventHandler(this.mostrarreviews_Click_1);
             // 
             // comboBox1
             // 
@@ -326,6 +314,16 @@
             this.label1.TabIndex = 250;
             this.label1.Text = "Serviço:";
             this.label1.Visible = false;
+            // 
+            // ListBox
+            // 
+            this.ListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBox.FormattingEnabled = true;
+            this.ListBox.ItemHeight = 25;
+            this.ListBox.Location = new System.Drawing.Point(225, 133);
+            this.ListBox.Name = "ListBox";
+            this.ListBox.Size = new System.Drawing.Size(889, 454);
+            this.ListBox.TabIndex = 251;
             // 
             // Cliente
             // 
@@ -349,19 +347,17 @@
             this.Controls.Add(this.artistname);
             this.Controls.Add(this.givereview);
             this.Controls.Add(this.btnReview);
-            this.Controls.Add(this.dataGridViewArtistas);
             this.Controls.Add(this.comboBoxCategorias);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnArtistas);
             this.Controls.Add(this.btnProdutos);
             this.Controls.Add(this.btnServicos);
+            this.Controls.Add(this.ListBox);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Cliente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cliente";
-            this.Load += new System.EventHandler(this.Cliente_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArtistas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -374,7 +370,6 @@
         private System.Windows.Forms.Button btnArtistas;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ComboBox comboBoxCategorias;
-        private System.Windows.Forms.DataGridView dataGridViewArtistas;
         private System.Windows.Forms.Button btnReview;
         private System.Windows.Forms.TextBox txtNomeArtista;
         private System.Windows.Forms.TextBox txtFeedback;
@@ -392,5 +387,6 @@
         private System.Windows.Forms.Button mostrarreviews;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox ListBox;
     }
 }

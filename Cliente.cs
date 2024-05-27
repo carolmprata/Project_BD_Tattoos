@@ -47,14 +47,21 @@ namespace Project_BD_Tattoos
             comboBoxCategorias.Items.Add("Especialista Remoção a Laser");
             comboBoxCategorias.Items.Add("Tatuador");
             comboBoxCategorias.Items.Add("Body Piercer");
+            if (comboBoxCategorias.Items.Count > 0)
+            {
+                comboBoxCategorias.SelectedIndex = 0; // Select the first item by default
+            }
         }
-
         private void LoadServicosCategorias()
         {
             comboBoxCategorias.Items.Clear();
             comboBoxCategorias.Items.Add("Remoção a Laser");
             comboBoxCategorias.Items.Add("Tatuagem");
             comboBoxCategorias.Items.Add("Piercing");
+            if (comboBoxCategorias.Items.Count > 0)
+            {
+                comboBoxCategorias.SelectedIndex = 0; // Select the first item by default
+            }
         }
 
         private void LoadArtistasByCategory(string categoria)
@@ -69,36 +76,44 @@ namespace Project_BD_Tattoos
                 {
                     case "Especialista Remoção a Laser":
                         query = @"
-                        SELECT S.Nome
-                        FROM Artista A
-                        INNER JOIN EspecialistaRemocaoLaser E ON A.Artista_ID = E.Artista_ID
-                        INNER JOIN Staff S ON A.Artista_ID = S.ID";
+                SELECT S.Nome
+                FROM Artista A
+                INNER JOIN EspecialistaRemocaoLaser E ON A.Artista_ID = E.Artista_ID
+                INNER JOIN Staff S ON A.Artista_ID = S.ID";
                         break;
                     case "Tatuador":
                         query = @"
-                        SELECT S.Nome, T.Especialidade
-                        FROM Artista A
-                        INNER JOIN Tatuador T ON A.Artista_ID = T.Artista_ID
-                        INNER JOIN Staff S ON A.Artista_ID = S.ID";
+                SELECT S.Nome, T.Especialidade
+                FROM Artista A
+                INNER JOIN Tatuador T ON A.Artista_ID = T.Artista_ID
+                INNER JOIN Staff S ON A.Artista_ID = S.ID";
                         break;
                     case "Body Piercer":
                         query = @"
-                        SELECT S.Nome
-                        FROM Artista A
-                        INNER JOIN BodyPiercer B ON A.Artista_ID = B.Artista_ID
-                        INNER JOIN Staff S ON A.Artista_ID = S.ID";
+                SELECT S.Nome
+                FROM Artista A
+                INNER JOIN BodyPiercer B ON A.Artista_ID = B.Artista_ID
+                INNER JOIN Staff S ON A.Artista_ID = S.ID";
                         break;
                 }
 
                 if (!string.IsNullOrEmpty(query))
                 {
-                    dataGridViewArtistas.Show();
+                    ListBox.Items.Clear();
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    dataGridViewArtistas.DataSource = dataTable;
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (categoria == "Tatuador")
+                        {
+                            ListBox.Items.Add($"{reader["Nome"]} - Especialidade: {reader["Especialidade"]}");
+                        }
+                        else
+                        {
+                            ListBox.Items.Add(reader["Nome"].ToString());
+                        }
+                    }
+                    reader.Close();
                 }
                 cn.Close();
             }
@@ -142,12 +157,14 @@ namespace Project_BD_Tattoos
 
                 if (!string.IsNullOrEmpty(query))
                 {
+                    ListBox.Items.Clear();
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    dataGridViewArtistas.DataSource = dataTable;
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        ListBox.Items.Add(reader["Descricao"].ToString());
+                    }
+                    reader.Close();
                 }
                 cn.Close();
             }
@@ -182,11 +199,14 @@ namespace Project_BD_Tattoos
                 cn = bdConnection.getSGBDConnection();
                 cn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Nome, Preco, Quantidade, Descricao FROM Produto", cn);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-
-                dataGridViewArtistas.DataSource = dataTable;
+                SqlDataReader reader = cmd.ExecuteReader();
+                ListBox.Items.Clear(); // Assuming the ListBox is named listBoxArtistas
+                while (reader.Read())
+                {
+                    string productInfo = $"Nome: {reader["Nome"]}, Preço: {reader["Preco"]}, Descrição: {reader["Descricao"]}";
+                    ListBox.Items.Add(productInfo);
+                }
+                reader.Close();
                 cn.Close();
             }
             catch (Exception ex)
@@ -194,6 +214,7 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Erro ao carregar produtos: " + ex.Message);
             }
         }
+
 
         private void Cliente_Load(object sender, EventArgs e)
         {
@@ -203,7 +224,7 @@ namespace Project_BD_Tattoos
         private void BtnReview_Click(object sender, EventArgs e)
         {
             ShowReviewControls();
-            dataGridViewArtistas.DataSource = null;
+            ListBox.Items.Clear();
         }
 
         private void BtnEnviar_Click(object sender, EventArgs e)
@@ -470,7 +491,7 @@ namespace Project_BD_Tattoos
             }
         }
 
-        private void mostrarreviews_Click(object sender, EventArgs e)
+        private void mostrarreviews_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -489,7 +510,11 @@ namespace Project_BD_Tattoos
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
 
-                dataGridViewArtistas.DataSource = dataTable;
+                ListBox.Items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    ListBox.Items.Add($"{row["ServicoDescricao"]} - {row["ReviewDescricao"]} - {row["Avaliacao"]}");
+                }
                 cn.Close();
             }
             catch (Exception ex)
@@ -497,5 +522,6 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Erro ao carregar reviews: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }
