@@ -22,6 +22,7 @@ namespace Project_BD_Tattoos
             btnProdutos.Click += new EventHandler(BtnProdutos_Click);
             btnReview.Click += new EventHandler(BtnReview_Click);
             btnEnviar.Click += new EventHandler(BtnEnviar_Click);
+            txtNomeArtista.TextChanged += new EventHandler(txtNomeArtista_TextChanged);
         }
 
         private void comboBoxCategorias_SelectedIndexChanged(object sender, EventArgs e)
@@ -223,23 +224,10 @@ namespace Project_BD_Tattoos
             int avaliacao = GetAvaliacao();
 
             // Determinar o tipo de serviço selecionado
-            string servico = null;
-            if (chkTatuagem.Checked)
-            {
-                servico = "Tatuagem";
-            }
-            else if (chkPiercing.Checked)
-            {
-                servico = "Piercing";
-            }
-            else if (chkRemocao.Checked)
-            {
-                servico = "Remocao";
-            }
-
+            string servico = comboBox1.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(servico))
             {
-                MessageBox.Show("Selecione um tipo de serviço.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Selecione um serviço.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -286,9 +274,6 @@ namespace Project_BD_Tattoos
 
                 txtNomeArtista.Text = "";
                 txtFeedback.Text = "";
-                chkTatuagem.Checked = false;
-                chkPiercing.Checked = false;
-                chkRemocao.Checked = false;
                 ResetAvaliacoes();
             }
             else
@@ -338,40 +323,15 @@ namespace Project_BD_Tattoos
         {
             try
             {
-                string query = "";
-                switch (servico)
-                {
-                    case "Tatuagem":
-                        query = @"
-                        SELECT S.ID
-                        FROM Servico S
-                        INNER JOIN Tatuagem T ON S.ID = T.Servico_ID
-                        INNER JOIN Tatuador TA ON T.Tatuador = TA.Artista_ID
-                        INNER JOIN Artista A ON TA.Artista_ID = A.Artista_ID
-                        INNER JOIN Staff ST ON A.Artista_ID = ST.ID
-                        WHERE ST.Nome = @nomeArtista";
-                        break;
-                    case "Piercing":
-                        query = @"
-                        SELECT S.ID
-                        FROM Servico S
-                        INNER JOIN Piercing P ON S.ID = P.Servico_ID
-                        INNER JOIN BodyPiercer B ON P.BodyPiercer_ID = B.Artista_ID
-                        INNER JOIN Artista A ON B.Artista_ID = A.Artista_ID
-                        INNER JOIN Staff ST ON A.Artista_ID = ST.ID
-                        WHERE ST.Nome = @nomeArtista";
-                        break;
-                    case "Remocao":
-                        query = @"
-                        SELECT S.ID
-                        FROM Servico S
-                        INNER JOIN Remocao R ON S.ID = R.Servico_ID
-                        INNER JOIN EspecialistaRemocaoLaser ER ON R.EspecialistaRemocaoLaser = ER.Artista_ID
-                        INNER JOIN Artista A ON ER.Artista_ID = A.Artista_ID
-                        INNER JOIN Staff ST ON A.Artista_ID = ST.ID
-                        WHERE ST.Nome = @nomeArtista";
-                        break;
-                }
+                string query = @"
+                SELECT S.ID
+                FROM Servico S
+                LEFT JOIN Tatuagem T ON S.ID = T.Servico_ID
+                LEFT JOIN Piercing P ON S.ID = P.Servico_ID
+                LEFT JOIN Remocao R ON S.ID = R.Servico_ID
+                INNER JOIN Artista A ON (T.Tatuador = A.Artista_ID OR P.BodyPiercer_ID = A.Artista_ID OR R.EspecialistaRemocaoLaser = A.Artista_ID)
+                INNER JOIN Staff ST ON A.Artista_ID = ST.ID
+                WHERE ST.Nome = @nomeArtista";
 
                 SqlCommand cmd = new SqlCommand(query, cn);
                 cmd.Parameters.AddWithValue("@nomeArtista", nomeArtista);
@@ -412,9 +372,7 @@ namespace Project_BD_Tattoos
             givereview.Show();
             ClientName.Show();
             txtClienteID.Show();
-            chkPiercing.Show();
-            chkRemocao.Show();
-            chkTatuagem.Show();
+            comboBox1.Show();
             rdoAval1.Show();
             rdoAval2.Show();
             rdoAval3.Show();
@@ -433,9 +391,7 @@ namespace Project_BD_Tattoos
             givereview.Hide();
             ClientName.Hide();
             txtClienteID.Hide();
-            chkPiercing.Hide();
-            chkRemocao.Hide();
-            chkTatuagem.Hide();
+            comboBox1.Hide();
             rdoAval1.Hide();
             rdoAval2.Hide();
             rdoAval3.Hide();
@@ -443,26 +399,6 @@ namespace Project_BD_Tattoos
             rdoAval5.Hide();
             mostrarreviews.Hide();
             btnEnviar.Hide();
-        }
-
-        private void BtnSearchCliente_Click(object sender, EventArgs e)
-        {
-            string nomeCliente = txtClienteID.Text.Trim();
-            if (string.IsNullOrEmpty(nomeCliente))
-            {
-                MessageBox.Show("Digite o nome do cliente para pesquisa.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int clienteID = GetClienteIDByName(nomeCliente);
-            if (clienteID != -1)
-            {
-                MessageBox.Show($"Cliente encontrado! ID: {clienteID}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Cliente não encontrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void LoadArtistNamesForAutocomplete()
@@ -494,34 +430,72 @@ namespace Project_BD_Tattoos
             }
         }
 
+        private void txtNomeArtista_TextChanged(object sender, EventArgs e)
+        {
+            LoadServicosByArtista(txtNomeArtista.Text.Trim());
+        }
+
+        private void LoadServicosByArtista(string nomeArtista)
+        {
+            try
+            {
+                cn = bdConnection.getSGBDConnection();
+                cn.Open();
+                string query = @"
+                    SELECT S.Descricao
+                    FROM Servico S
+                    LEFT JOIN Tatuagem T ON S.ID = T.Servico_ID
+                    LEFT JOIN Piercing P ON S.ID = P.Servico_ID
+                    LEFT JOIN Remocao R ON S.ID = R.Servico_ID
+                    INNER JOIN Artista A ON (T.Tatuador = A.Artista_ID OR P.BodyPiercer_ID = A.Artista_ID OR R.EspecialistaRemocaoLaser = A.Artista_ID)
+                    INNER JOIN Staff ST ON A.Artista_ID = ST.ID
+                    WHERE ST.Nome = @nomeArtista";
+
+                SqlCommand cmd = new SqlCommand(query, cn);
+                cmd.Parameters.AddWithValue("@nomeArtista", nomeArtista);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                comboBox1.Items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    comboBox1.Items.Add(row["Descricao"].ToString());
+                }
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar serviços do artista: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void mostrarreviews_Click(object sender, EventArgs e)
         {
             try
-                {
-                    cn = bdConnection.getSGBDConnection();
-                    cn.Open();
-                    HideReviewControls();
+            {
+                cn = bdConnection.getSGBDConnection();
+                cn.Open();
+                HideReviewControls();
 
-                    string query = @"
-                    SELECT S.Descricao AS ServicoDescricao, R.Descricao AS ReviewDescricao, R.Avaliacao
-                    FROM Review R
-                    INNER JOIN Cliente C ON R.Cliente_ID = C.ID
-                    INNER JOIN Servico S ON R.Servico_ID = S.ID";
+                string query = @"
+                SELECT S.Descricao AS ServicoDescricao, R.Descricao AS ReviewDescricao, R.Avaliacao
+                FROM Review R
+                INNER JOIN Cliente C ON R.Cliente_ID = C.ID
+                INNER JOIN Servico S ON R.Servico_ID = S.ID";
 
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
+                SqlCommand cmd = new SqlCommand(query, cn);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
 
-                    dataGridViewArtistas.DataSource = dataTable;
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao carregar reviews: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                dataGridViewArtistas.DataSource = dataTable;
+                cn.Close();
             }
-
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar reviews: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
