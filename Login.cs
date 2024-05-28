@@ -57,7 +57,7 @@ namespace Project_BD_Tattoos
 
             if (isRececionista && !isArtista)
             {
-                button1.BackColor = Color.Green;
+                button1.BackColor = Color.LightBlue;
                 button3.BackColor = originalButton3Color; 
                 label3.Show();
                 txtID.Show();
@@ -74,7 +74,7 @@ namespace Project_BD_Tattoos
 
             if (isArtista && !isRececionista)
             {
-                button3.BackColor = Color.Green;
+                button3.BackColor = Color.LightBlue;
                 button1.BackColor = originalButtonRececionistaColor;
                 label3.Show();
                 txtID.Show();

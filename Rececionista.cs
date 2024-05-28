@@ -238,7 +238,7 @@ namespace Project_BD_Tattoos
                         cmd.Parameters.AddWithValue("@DataHora", newDataHora);
                         cmd.Parameters.AddWithValue("@Valor", newValor);
                         cmd.Parameters.AddWithValue("@Metodo", newMetodo);
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@ID", Convert.ToInt32(id));
                         cmd.ExecuteNonQuery();
                         cn.Close();
                         MessageBox.Show("Pagamento updated successfully!");
@@ -577,6 +577,13 @@ namespace Project_BD_Tattoos
             this.Close();
             MarcacaoForm marcacaoForm = new MarcacaoForm();
             marcacaoForm.Show();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Login login = new Login();
+            login.Show();
         }
     }
 }

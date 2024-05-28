@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using static Project_BD_Tattoos.Rececionista;
 
 namespace Project_BD_Tattoos
 {
@@ -16,13 +17,15 @@ namespace Project_BD_Tattoos
             InitializeComponent();
             comboBoxCategorias.SelectedIndexChanged += new EventHandler(comboBoxCategorias_SelectedIndexChanged);
 
-            // Adicionar eventos para os botões
             btnArtistas.Click += new EventHandler(BtnArtistas_Click);
             btnServicos.Click += new EventHandler(BtnServicos_Click);
             btnProdutos.Click += new EventHandler(BtnProdutos_Click);
             btnReview.Click += new EventHandler(BtnReview_Click);
             btnEnviar.Click += new EventHandler(BtnEnviar_Click);
             txtNomeArtista.TextChanged += new EventHandler(txtNomeArtista_TextChanged);
+            numericUpDown1.ValueChanged += new EventHandler(NumericUpDown1_ValueChanged);
+            ListBox.SelectedIndexChanged += new EventHandler(ListBox_SelectedIndexChanged);
+
         }
 
         private void comboBoxCategorias_SelectedIndexChanged(object sender, EventArgs e)
@@ -43,24 +46,36 @@ namespace Project_BD_Tattoos
 
         private void LoadArtistaCategorias()
         {
+            labelPreco.Hide();
+            labelQuantidade.Hide();
+            numericUpDown1.Hide();
+            buttonAdquirir.Hide();
+            textBoxPreco.Hide();
+
             comboBoxCategorias.Items.Clear();
             comboBoxCategorias.Items.Add("Especialista Remoção a Laser");
             comboBoxCategorias.Items.Add("Tatuador");
             comboBoxCategorias.Items.Add("Body Piercer");
             if (comboBoxCategorias.Items.Count > 0)
             {
-                comboBoxCategorias.SelectedIndex = 0; // Select the first item by default
+                comboBoxCategorias.SelectedIndex = 0;
             }
         }
         private void LoadServicosCategorias()
         {
+            labelPreco.Hide();
+            labelQuantidade.Hide();
+            numericUpDown1.Hide();
+            buttonAdquirir.Hide();
+            textBoxPreco.Hide();
+
             comboBoxCategorias.Items.Clear();
             comboBoxCategorias.Items.Add("Remoção a Laser");
             comboBoxCategorias.Items.Add("Tatuagem");
             comboBoxCategorias.Items.Add("Piercing");
             if (comboBoxCategorias.Items.Count > 0)
             {
-                comboBoxCategorias.SelectedIndex = 0; // Select the first item by default
+                comboBoxCategorias.SelectedIndex = 0;
             }
         }
 
@@ -162,7 +177,7 @@ namespace Project_BD_Tattoos
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        ListBox.Items.Add(reader["Descricao"].ToString());
+                        ListBox.Items.Add($"{reader["Descricao"]}, Preço: {reader["Preco"]}");
                     }
                     reader.Close();
                 }
@@ -178,18 +193,26 @@ namespace Project_BD_Tattoos
         {
             LoadArtistaCategorias();
             HideReviewControls();
+
         }
 
         private void BtnServicos_Click(object sender, EventArgs e)
         {
             LoadServicosCategorias();
             HideReviewControls();
+            comboBoxCategorias.Show();
         }
 
         private void BtnProdutos_Click(object sender, EventArgs e)
         {
+            labelPreco.Show();
+            labelQuantidade.Show();
+            numericUpDown1.Show();
+            buttonAdquirir.Show();
+            textBoxPreco.Show();
             LoadProdutos();
             HideReviewControls();
+            comboBoxCategorias.Hide();
         }
 
         private void LoadProdutos()
@@ -200,10 +223,10 @@ namespace Project_BD_Tattoos
                 cn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Nome, Preco, Quantidade, Descricao FROM Produto", cn);
                 SqlDataReader reader = cmd.ExecuteReader();
-                ListBox.Items.Clear(); // Assuming the ListBox is named listBoxArtistas
+                ListBox.Items.Clear();
                 while (reader.Read())
                 {
-                    string productInfo = $"Nome: {reader["Nome"]}, Preço: {reader["Preco"]}, Descrição: {reader["Descricao"]}";
+                    string productInfo = $"{reader["Nome"]}, Preço: {reader["Preco"]}, Descrição: {reader["Descricao"]}";
                     ListBox.Items.Add(productInfo);
                 }
                 reader.Close();
@@ -223,6 +246,7 @@ namespace Project_BD_Tattoos
 
         private void BtnReview_Click(object sender, EventArgs e)
         {
+            comboBoxCategorias.Hide();
             ShowReviewControls();
             ListBox.Items.Clear();
         }
@@ -244,7 +268,6 @@ namespace Project_BD_Tattoos
             string descricao = txtFeedback.Text.Trim();
             int avaliacao = GetAvaliacao();
 
-            // Determinar o tipo de serviço selecionado
             string servico = comboBox1.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(servico))
             {
@@ -252,7 +275,6 @@ namespace Project_BD_Tattoos
                 return;
             }
 
-            // Obter o ID do serviço baseado no nome do artista e tipo de serviço
             int servicoID = GetServicoID(nomeArtista, servico);
             if (servicoID == -1)
             {
@@ -260,13 +282,12 @@ namespace Project_BD_Tattoos
                 return;
             }
 
-            // Obter o próximo ID para a review
+
             int nextReviewID = GetNextReviewID();
 
-            // Exibir o próximo ID da review para depuração
-            MessageBox.Show($"Próximo ID da review: {nextReviewID}", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Inserir review
+
+
             if (!string.IsNullOrEmpty(descricao) && avaliacao >= 1 && avaliacao <= 5)
             {
                 try
@@ -389,6 +410,7 @@ namespace Project_BD_Tattoos
             txtNomeArtista.Show();
             txtFeedback.Show();
             artistname.Show();
+            labelServico.Show();
             feedback.Show();
             givereview.Show();
             ClientName.Show();
@@ -401,12 +423,18 @@ namespace Project_BD_Tattoos
             rdoAval5.Show();
             mostrarreviews.Show();
             btnEnviar.Show();
+            labelQuantidade.Hide();
+            numericUpDown1.Hide();
+            labelPreco.Hide();
+            labelPreco.Hide();
+            buttonAdquirir.Hide();
         }
 
         private void HideReviewControls()
         {
             txtNomeArtista.Hide();
             txtFeedback.Hide();
+            labelServico.Hide();
             artistname.Hide();
             feedback.Hide();
             givereview.Hide();
@@ -450,6 +478,7 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Erro ao carregar nomes dos artistas para autocomplete: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void txtNomeArtista_TextChanged(object sender, EventArgs e)
         {
@@ -523,5 +552,265 @@ namespace Project_BD_Tattoos
             }
         }
 
+        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTotalPrice();
+        }
+
+        private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateTotalPrice();
+        }
+
+        private void UpdateTotalPrice()
+        {
+            if (ListBox.SelectedItem != null)
+            {
+                string selectedProduct = ListBox.SelectedItem.ToString().Split(',')[0].Trim();
+
+                try
+                {
+                    cn = bdConnection.getSGBDConnection();
+                    cn.Open();
+
+                    SqlCommand cmd = new SqlCommand("SELECT Preco FROM Produto WHERE Nome = @Nome", cn);
+                    cmd.Parameters.AddWithValue("@Nome", selectedProduct);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && decimal.TryParse(result.ToString(), out decimal unitPrice))
+                    {
+                        int quantity = (int)numericUpDown1.Value;
+                        decimal totalPrice = unitPrice * quantity;
+                        textBoxPreco.Text = totalPrice.ToString("0.00") + "€";
+                    }
+                    cn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao carregar o preço do produto: " + ex.Message);
+                }
+            }
+        }
+
+        private void ButtonAdquirir_Click(object sender, EventArgs e)
+        {
+            SqlConnection cn = null;
+
+            try
+            {
+                if (ListBox.SelectedItem == null)
+                {
+                    MessageBox.Show("Por favor, selecione um produto.");
+                    return;
+                }
+
+                string nomeOuEmail = Prompt.ShowDialog("Por favor, insira o nome ou email do cliente:", "Cliente");
+
+                if (string.IsNullOrEmpty(nomeOuEmail))
+                {
+                    MessageBox.Show("Nome ou email do cliente não pode ser vazio.");
+                    return;
+                }
+
+                cn = bdConnection.getSGBDConnection();
+                cn.Open();
+
+                // Start a transaction
+                SqlTransaction transaction = cn.BeginTransaction();
+
+                // Find client ID by name or email
+                SqlCommand findClientCmd = new SqlCommand(
+                    "SELECT ID FROM Cliente WHERE Nome = @NomeOuEmail OR Email = @NomeOuEmail", cn, transaction);
+                findClientCmd.Parameters.AddWithValue("@NomeOuEmail", nomeOuEmail);
+
+                object result = findClientCmd.ExecuteScalar();
+
+                if (result == null)
+                {
+                    MessageBox.Show("Cliente não encontrado.");
+                    cn.Close();
+                    return;
+                }
+
+                int clientId = (int)result;
+
+                // Get selected product details
+                string selectedProduct = ListBox.SelectedItem.ToString().Split(',')[0].Trim();
+
+                SqlCommand cmd = new SqlCommand("SELECT Preco FROM Produto WHERE Nome = @Nome", cn, transaction);
+                cmd.Parameters.AddWithValue("@Nome", selectedProduct);
+
+                result = cmd.ExecuteScalar();
+                if (result != null && decimal.TryParse(result.ToString(), out decimal productPrice))
+                {
+                    int quantity = (int)numericUpDown1.Value;
+                    decimal totalPrice = productPrice * quantity;
+                    textBoxPreco.Text = totalPrice.ToString("0.00") + "€";
+
+                    // Find product ID by name
+                    SqlCommand findProductCmd = new SqlCommand(
+                        "SELECT ID, Quantidade FROM Produto WHERE Nome = @Nome", cn, transaction);
+                    findProductCmd.Parameters.AddWithValue("@Nome", selectedProduct);
+
+                    SqlDataReader reader = findProductCmd.ExecuteReader();
+                    if (!reader.Read())
+                    {
+                        MessageBox.Show("Produto não encontrado.");
+                        reader.Close();
+                        cn.Close();
+                        return;
+                    }
+
+                    int productId = (int)reader["ID"];
+                    int availableQuantity = (int)reader["Quantidade"];
+                    reader.Close();
+
+                    if (availableQuantity < quantity)
+                    {
+                        MessageBox.Show("Quantidade insuficiente em estoque.");
+                        cn.Close();
+                        return;
+                    }
+
+                    int nextID = GetNextID("Pagamento");
+
+                    DateTime newDataHora = DateTime.Now.AddMinutes(1);
+
+                    string newMetodo = "Dinheiro";
+
+                    decimal newValor = totalPrice;
+
+                    int newClienteID = clientId;
+
+                    SqlCommand insertPaymentCmd = new SqlCommand("AddPagamento", cn, transaction);
+                    insertPaymentCmd.CommandType = CommandType.StoredProcedure;
+                    insertPaymentCmd.Parameters.AddWithValue("@ID", nextID);
+                    insertPaymentCmd.Parameters.AddWithValue("@Cliente_ID", newClienteID);
+                    insertPaymentCmd.Parameters.AddWithValue("@DataHora", newDataHora);
+                    insertPaymentCmd.Parameters.AddWithValue("@Valor", newValor);
+                    insertPaymentCmd.Parameters.AddWithValue("@Metodo", newMetodo);
+
+                    int paymentResult = insertPaymentCmd.ExecuteNonQuery();
+
+                    SqlCommand updateProductCmd = new SqlCommand(
+                        "UPDATE Produto SET Quantidade = Quantidade - @Quantidade WHERE ID = @ID", cn, transaction);
+                    updateProductCmd.Parameters.AddWithValue("@Quantidade", quantity);
+                    updateProductCmd.Parameters.AddWithValue("@ID", productId);
+
+                    int updateResult = updateProductCmd.ExecuteNonQuery();
+
+                    if (paymentResult > 0 && updateResult > 0)
+                    {
+                        // Commit the transaction
+                        transaction.Commit();
+                        MessageBox.Show("Produto adquirido com sucesso.");
+                        
+                        Prompt.ClosePrompt();
+                        this.Hide();
+                        Cliente cliente = new Cliente();
+                        cliente.Show();
+                        this.Close(); 
+                        cn.Close();
+                        transaction.Dispose();
+
+                        return;
+                    }
+                    else
+                    {
+                        // Rollback the transaction if anything failed
+                        transaction.Rollback();
+                        MessageBox.Show("Erro ao adquirir produto.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Erro ao obter o preço do produto.");
+                }
+
+                cn.Close();
+                return;
+            }
+            
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao adquirir produto: " + ex.Message);
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+        }
+
+
+        public int GetNextID(string tableName)
+        {
+            int nextID = 1;
+            try
+            {
+                cn = bdConnection.getSGBDConnection();
+                cn.Open();
+                SqlCommand cmd = new SqlCommand($"SELECT MAX(ID) FROM {tableName}", cn);
+                object result = cmd.ExecuteScalar();
+                if (result != null && int.TryParse(result.ToString(), out int maxID))
+                {
+                    nextID = maxID + 1;
+                }
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao obter próximo ID: " + ex.Message);
+            }
+            return nextID;
+        }
+
+        public static class Prompt
+        {
+            public static string ShowDialog(string text, string caption)
+            {
+                Form prompt = new Form()
+                {
+                    Width = 700,
+                    Height = 200,
+                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    Text = caption,
+                    StartPosition = FormStartPosition.CenterScreen,
+                    Font = new System.Drawing.Font("Segoe UI", 11)
+                };
+                Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+                TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
+                Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
+                confirmation.Click += (sender, e) => { prompt.Close(); };
+                prompt.Controls.Add(textBox);
+                prompt.Controls.Add(confirmation);
+                prompt.Controls.Add(textLabel);
+                prompt.AcceptButton = confirmation;
+
+
+                
+
+                return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+            }
+
+            //close the Prompt
+            public static void ClosePrompt()
+            {
+                Form prompt = new Form();
+                prompt.Close();
+            }
+        }
+
+        private void Cliente_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Login login = new Login();
+            login.Show();
+
+        }
     }
 }

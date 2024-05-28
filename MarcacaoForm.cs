@@ -196,7 +196,13 @@ namespace Project_BD_Tattoos
                 int artistID = int.Parse(selectedArtist.Split(new[] { "ID: " }, StringSplitOptions.None)[1].Split(')')[0].Trim());
                 int serviceID = int.Parse(selectedService.Split(new[] { "ID: " }, StringSplitOptions.None)[1].Split(',')[0].Trim());
                 string clientName = nameBar.Text;
+                //date sem horas
                 DateTime date = dateTPInicio.Value.Date;
+
+                //time sem data
+
+
+
                 TimeSpan time = dateTPInicio.Value.TimeOfDay;
 
                 // Find client ID by name
