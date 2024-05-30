@@ -573,8 +573,8 @@ namespace Project_BD_Tattoos
                     cn = bdConnection.getSGBDConnection();
                     cn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT Preco FROM Produto WHERE Nome = @Nome", cn);
-                    cmd.Parameters.AddWithValue("@Nome", selectedProduct);
+                    SqlCommand cmd = new SqlCommand("SELECT dbo.GetProdutoPreco(@NomeProduto)", cn);
+                    cmd.Parameters.AddWithValue("@NomeProduto", selectedProduct);
 
                     object result = cmd.ExecuteScalar();
                     if (result != null && decimal.TryParse(result.ToString(), out decimal unitPrice))
@@ -591,6 +591,7 @@ namespace Project_BD_Tattoos
                 }
             }
         }
+
 
         private void ButtonAdquirir_Click(object sender, EventArgs e)
         {
@@ -812,5 +813,7 @@ namespace Project_BD_Tattoos
             login.Show();
 
         }
+
+
     }
 }
