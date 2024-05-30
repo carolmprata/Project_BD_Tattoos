@@ -495,6 +495,15 @@ namespace Project_BD_Tattoos
                 {
                     cn = bdConnection.getSGBDConnection();
                     cn.Open();
+
+                    // Verificar se é Cliente e excluir Agendamentos associados
+                    if (tableName == "Cliente")
+                    {
+                        SqlCommand deleteAgendamentosCmd = new SqlCommand("DELETE FROM Agendamento WHERE Cliente_ID = @ID", cn);
+                        deleteAgendamentosCmd.Parameters.AddWithValue("@ID", id);
+                        deleteAgendamentosCmd.ExecuteNonQuery();
+                    }
+
                     SqlCommand cmd = new SqlCommand($"DELETE FROM {tableName} WHERE ID = @ID", cn);
                     cmd.Parameters.AddWithValue("@ID", id);
                     cmd.ExecuteNonQuery();
@@ -524,6 +533,8 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Please select an item to delete.");
             }
         }
+
+
 
         private int GetNextID(string tableName)
         {

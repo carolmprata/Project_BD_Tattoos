@@ -50,7 +50,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(14, 7);
+            this.label2.Location = new System.Drawing.Point(134, 6);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(0, 29);
             this.label2.TabIndex = 6;
@@ -61,7 +61,7 @@
             this.DisplayContainer.FormattingEnabled = true;
             this.DisplayContainer.ItemHeight = 17;
             this.DisplayContainer.Location = new System.Drawing.Point(195, 114);
-            this.DisplayContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.DisplayContainer.Margin = new System.Windows.Forms.Padding(2);
             this.DisplayContainer.Name = "DisplayContainer";
             this.DisplayContainer.Size = new System.Drawing.Size(767, 412);
             this.DisplayContainer.TabIndex = 213;
@@ -80,7 +80,7 @@
             this.botaoServicos.AutoSize = true;
             this.botaoServicos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.botaoServicos.Location = new System.Drawing.Point(6, 11);
-            this.botaoServicos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.botaoServicos.Margin = new System.Windows.Forms.Padding(2);
             this.botaoServicos.Name = "botaoServicos";
             this.botaoServicos.Size = new System.Drawing.Size(87, 24);
             this.botaoServicos.TabIndex = 230;
@@ -94,7 +94,7 @@
             this.botaoPagamentos.AutoSize = true;
             this.botaoPagamentos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.botaoPagamentos.Location = new System.Drawing.Point(6, 59);
-            this.botaoPagamentos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.botaoPagamentos.Margin = new System.Windows.Forms.Padding(2);
             this.botaoPagamentos.Name = "botaoPagamentos";
             this.botaoPagamentos.Size = new System.Drawing.Size(117, 24);
             this.botaoPagamentos.TabIndex = 3;
@@ -108,7 +108,7 @@
             this.botaoProdutos.AutoSize = true;
             this.botaoProdutos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.botaoProdutos.Location = new System.Drawing.Point(6, 84);
-            this.botaoProdutos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.botaoProdutos.Margin = new System.Windows.Forms.Padding(2);
             this.botaoProdutos.Name = "botaoProdutos";
             this.botaoProdutos.Size = new System.Drawing.Size(91, 24);
             this.botaoProdutos.TabIndex = 4;
@@ -131,7 +131,7 @@
             this.botaoClientes.AutoSize = true;
             this.botaoClientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.botaoClientes.Location = new System.Drawing.Point(6, 35);
-            this.botaoClientes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.botaoClientes.Margin = new System.Windows.Forms.Padding(2);
             this.botaoClientes.Name = "botaoClientes";
             this.botaoClientes.Size = new System.Drawing.Size(84, 24);
             this.botaoClientes.TabIndex = 1;
@@ -148,7 +148,7 @@
             this.panelCargo.Controls.Add(this.botaoPagamentos);
             this.panelCargo.Controls.Add(this.botaoServicos);
             this.panelCargo.Location = new System.Drawing.Point(11, 114);
-            this.panelCargo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelCargo.Margin = new System.Windows.Forms.Padding(2);
             this.panelCargo.Name = "panelCargo";
             this.panelCargo.Size = new System.Drawing.Size(151, 129);
             this.panelCargo.TabIndex = 237;
@@ -157,7 +157,7 @@
             // 
             this.buttonAlterar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAlterar.Location = new System.Drawing.Point(26, 274);
-            this.buttonAlterar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAlterar.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAlterar.Name = "buttonAlterar";
             this.buttonAlterar.Size = new System.Drawing.Size(102, 41);
             this.buttonAlterar.TabIndex = 238;
@@ -169,7 +169,7 @@
             // 
             this.buttonEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEliminar.Location = new System.Drawing.Point(26, 332);
-            this.buttonEliminar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEliminar.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEliminar.Name = "buttonEliminar";
             this.buttonEliminar.Size = new System.Drawing.Size(102, 41);
             this.buttonEliminar.TabIndex = 239;
@@ -181,7 +181,7 @@
             // 
             this.buttonAdicionar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAdicionar.Location = new System.Drawing.Point(26, 389);
-            this.buttonAdicionar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAdicionar.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAdicionar.Name = "buttonAdicionar";
             this.buttonAdicionar.Size = new System.Drawing.Size(102, 41);
             this.buttonAdicionar.TabIndex = 240;
@@ -194,9 +194,9 @@
             this.button1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(5, 499);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(201, 49);
+            this.button1.Size = new System.Drawing.Size(186, 49);
             this.button1.TabIndex = 241;
             this.button1.Text = "Agendar Marcação";
             this.button1.UseVisualStyleBackColor = false;
@@ -206,9 +206,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Project_BD_Tattoos.Properties.Resources.BD_LOGO;
-            this.pictureBox1.Location = new System.Drawing.Point(5, 6);
+            this.pictureBox1.Location = new System.Drawing.Point(11, 6);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(116, 103);
+            this.pictureBox1.Size = new System.Drawing.Size(109, 103);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 242;
             this.pictureBox1.TabStop = false;
