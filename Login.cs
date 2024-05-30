@@ -45,11 +45,6 @@ namespace Project_BD_Tattoos
             originalButtonRececionistaColor = button1.BackColor;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             isRececionista = true;
@@ -112,18 +107,18 @@ namespace Project_BD_Tattoos
                 if (isRececionista)
                 {
                     query = @"
-            SELECT Staff.*
-            FROM Staff
-            INNER JOIN Rececionista ON Staff.ID = Rececionista.Staff_ID
-            WHERE Staff.Nome = @name AND Staff.ID = @id";
+                SELECT Staff.*
+                FROM Staff
+                INNER JOIN Rececionista ON Staff.ID = Rececionista.Staff_ID
+                WHERE Staff.Nome = @name AND Staff.ID = @id";
                 }
                 else if (isArtista)
                 {
                     query = @"
-            SELECT Staff.*
-            FROM Staff
-            INNER JOIN Artista ON Staff.ID = Artista.Artista_ID
-            WHERE Staff.Nome = @name AND Staff.ID = @id";
+                SELECT Staff.*
+                FROM Staff
+                INNER JOIN Artista ON Staff.ID = Artista.Artista_ID
+                WHERE Staff.Nome = @name AND Staff.ID = @id";
                 }
 
                 if (!string.IsNullOrEmpty(query))
@@ -163,6 +158,7 @@ namespace Project_BD_Tattoos
                 MessageBox.Show("Erro na conexão à base de dados: " + ex.Message);
             }
         }
+
 
 
 
